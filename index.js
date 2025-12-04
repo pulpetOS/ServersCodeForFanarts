@@ -1,6 +1,16 @@
 const express = require("express");
 const mysql = require("mysql2");
+const https = require('https');
 const app = express();
+
+https.get('https://api.ipify.org?format=json', (res) => {
+  let data = '';
+  res.on('data', chunk => data += chunk);
+  res.on('end', () => {
+    const ip = JSON.parse(data).ip;
+    console.log('Server public IP:', ip);
+  });
+}).on('error', err => console.error(err));
 
 app.use(express.json());
 
